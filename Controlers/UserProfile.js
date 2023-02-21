@@ -1,3 +1,5 @@
+// All the controler meathods for usre profiling
+
 var user = require("../DB/Models/User");
 module.exports.showProfile = async (req, res) => {
   try {

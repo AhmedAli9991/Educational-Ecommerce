@@ -11,6 +11,7 @@ const userschema = new mongoose.Schema({
     unique: true,
     validate: {
       validator: function (email) {
+        //validate the Email pattern using Regex
         return /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(
           email
         );
@@ -28,6 +29,7 @@ const userschema = new mongoose.Schema({
     lowercase: true,
     validate: {
       validator: function (role) {
+        //Check allowed role or not
         if (
           role.toLowerCase() == "student" ||
           role.toLowerCase() == "teacher" ||

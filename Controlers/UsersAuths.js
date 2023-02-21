@@ -1,7 +1,10 @@
+//User registration authebtication
+
 var user = require("../DB/Models/User");
 var bcrypt = require("bcrypt");
 var { createjwt } = require("../Utils/JWT");
 
+//user registration
 module.exports.Register = async (req, res, next) => {
   try {
     const { Name, Email, Password, Role } = req.body;
@@ -34,6 +37,7 @@ module.exports.Register = async (req, res, next) => {
   }
 };
 
+//user login and authentication using JWTs
 module.exports.Login = async (req, res, next) => {
   try {
     const { Email, Password } = req.body;
@@ -53,6 +57,8 @@ module.exports.Login = async (req, res, next) => {
     if (!match) {
       return res.status(400).json("password not correct");
     }
+
+    //call to create JWT in Utils
     var AccessToken = createjwt({
       _id: old._id,
       Email: old.Email,
@@ -66,6 +72,8 @@ module.exports.Login = async (req, res, next) => {
     next(err);
   }
 };
+
+//logout and clear cookies
 module.exports.Logout = (req, res) => {
   try {
     const { AccessToken } = req.cookies;

@@ -1,5 +1,5 @@
 var { verify } = require("../Utils/JWT");
-
+//middleware that decodes and attaches the user to the request object
 module.exports.getUser = (req, res, next) => {
   try {
     const { AccessToken } = req.cookies;
