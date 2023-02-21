@@ -1,23 +1,23 @@
 var user = require("../DB/Models/User");
 var bcrypt = require("bcrypt");
 var { createjwt } = require("../Utils/JWT");
+const { validate } = require("../Utils/validator");
 
 module.exports.Register = async (req, res, next) => {
   try {
     const { Name, Email, Password, Role } = req.body;
     if (
-      Name == null ||
-      Name == undefined ||
-      Email == null ||
-      Email == undefined ||
-      Password == null ||
-      Password == undefined ||
-      Role == null ||
-      Role == undefined
-    )
+      Name === null ||
+      Name === undefined ||
+      Email === null ||
+      Email === undefined ||
+      Password === null ||
+      Password === undefined ||
+      Role === (null|| undefined) //Suggestion: you can do this as well!
+    ) //What happens if someone send empty string, empty array or Object?
       return res.status(406).json("Enter all required fields");
 
-    old = await user.findOne({ Email });
+    old = await user.findOne({ Email }); //where is this old declared?
 
     if (old) return res.status(409).json("already exists");
 
@@ -36,14 +36,10 @@ module.exports.Register = async (req, res, next) => {
 
 module.exports.Login = async (req, res, next) => {
   try {
-    const { Email, Password } = req.body;
-    if (
-      Email == null ||
-      Email == undefined ||
-      Password == null ||
-      Password == undefined
-    )
-      return res.status(406).json("Enter all required fields");
+    const { Email, Password } = req.body;//camel case variable names only
+    const {isValid,message} = validate(req.body,["Email","Password"])
+    if (!isValid)
+      return res.status(406).json(message);
 
     old = await user.findOne({ Email });
     if (!old) {
@@ -59,9 +55,9 @@ module.exports.Login = async (req, res, next) => {
       Role: old.Role,
     });
     res.cookie("AccessToken", AccessToken, {
-      maxAge: 10000000000,
+      maxAge: 1*60* 60 *1000, //add this like this
     });
-    res.status(200).json("Logged in");
+    res.status(200).json("Logged in"); //this is not JSON! 
   } catch (err) {
     next(err);
   }
