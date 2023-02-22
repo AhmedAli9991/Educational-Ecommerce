@@ -1,9 +1,9 @@
 //All the Routes related to User
 
 const router = require("express").Router();
-const userauthcontroler = require("../Controlers/usersAuths");
-const usercontroler = require("../Controlers/users");
-const profilecontroler = require("../Controlers/userProfile")
+const userauthcontroler = require("../controlers/usersAuths");
+const usercontroler = require("../controlers/users");
+const profilecontroler = require("../controlers/userProfile")
 
 //verifyToken middleware that decodes the JWT and gets the users attributes
 

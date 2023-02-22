@@ -19,6 +19,7 @@ module.exports.verifyToken = (req, res, next) => {
   }
 };
 
+//middleware checks if the current user that is logged in has the roles to use the routes
 module.exports.permissions = (...roles) => {
   return (req, res, next) => {
     try {

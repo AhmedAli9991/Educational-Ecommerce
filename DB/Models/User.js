@@ -33,6 +33,7 @@ const userschema = new mongoose.Schema({
         if (
           role.toLowerCase() == "student" ||
           role.toLowerCase() == "teacher" ||
+          role.toLowerCase() == "principal" ||
           role.toLowerCase() == "admin"
         )
           return true;
