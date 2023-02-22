@@ -10,7 +10,7 @@ module.exports.showProfile = async (req, res, next) => {
     console.log(req.user);
     const profile = await user.findById(req.user._id, {
       _id: 0,
-      Password: 0,
+      password: 0,
     });
     if (!profile) {
       throw createError(404, "Not Found");
@@ -23,7 +23,7 @@ module.exports.showProfile = async (req, res, next) => {
 
 module.exports.updateProfile = async (req, res, next) => {
   try {
-    const val = validate(req.body, ["Name", "Email"]);
+    const val = validate(req.body, ["name", "email"]);
     if (!val.isValid) {
       throw createError(422, val.message);
     }

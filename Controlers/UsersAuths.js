@@ -8,22 +8,22 @@ const {createError}= require("../utils/error");
 //user registration
 module.exports.register = async (req, res, next) => {
   try {
-    const { Name, Email, Password, Role } = req.body;
+    const { name, email, password, role } = req.body;
 
-   const val =  validate(req.body,["Name","Email","Password","Role"] )
+   const val =  validate(req.body,["name","email","password","role"] )
     if (!val.isValid){
       throw(createError(422,val.message))
     }
-    const old = await user.findOne({ Email });
+    const old = await user.findOne({ email });
 
     if (old)throw(createError(409,"already exists"))  
 
-    var newPassword = await bcrypt.hash(Password, 12);
+    var newpassword = await bcrypt.hash(password, 12);
     const newu = await user.create({
-      Name,
-      Email,
-      Password: newPassword,
-      Role,
+      name,
+      email,
+      password: newpassword,
+      role,
     });
     res.status(201).json(newu);
   } catch (err) {
@@ -34,15 +34,15 @@ module.exports.register = async (req, res, next) => {
 //user login and authentication using JWTs
 module.exports.login = async (req, res, next) => {
   try {
-    const { Email, Password } = req.body; //camel case variable names only
-    const { isValid, message } = validate(req.body, ["Email", "Password"]);
+    const { email, password } = req.body; 
+    const { isValid, message } = validate(req.body, ["email", "password"]);
     if (!isValid) throw(createError(422,message));
 
-    const old = await user.findOne({ Email });
+    const old = await user.findOne({ email });
     if (!old) {
       throw(createError(404,"No such user registered"));
     }
-    const match = await bcrypt.compare(Password, old.Password);
+    const match = await bcrypt.compare(password, old.password);
     if (!match) {
       throw(createError(401,"password not correct"));
     }
@@ -50,8 +50,8 @@ module.exports.login = async (req, res, next) => {
     //call to create JWT in Utils
     var AccessToken = createJwt({
       _id: old._id,
-      Email: old.Email,
-      Role: old.Role,
+      email: old.email,
+      role: old.role,
     });
     res.cookie("AccessToken", AccessToken, {
       maxAge: 1 * 60 * 60 * 1000, 

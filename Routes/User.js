@@ -17,6 +17,6 @@ router.get("/getProfile",verifyToken,profilecontroler.showProfile);
 router.patch("/updateProfile",verifyToken,profilecontroler.updateProfile);
 router.delete("/delProfile",verifyToken,profilecontroler.deleteAccount);
 router.get("/showAlltoAdmin",verifyToken,permissions("admin"),usercontroler.showAlltoAdmin);
-router.get("/showAllRole/:Role",verifyToken,usercontroler.showbyRole);
+router.get("/showAllRole/:role",verifyToken,usercontroler.showbyRole);
 
 module.exports = router;

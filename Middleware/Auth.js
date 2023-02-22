@@ -22,7 +22,7 @@ module.exports.verifyToken = (req, res, next) => {
 module.exports.permissions = (...roles) => {
   return (req, res, next) => {
     try {
-      if (!roles.includes(req.user.Role)) {
+      if (!roles.includes(req.user.role)) {
         throw createError(401, "Unautherized");
       }
       next();
