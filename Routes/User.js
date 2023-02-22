@@ -1,23 +1,22 @@
 //All the Routes related to User
 
 const router = require("express").Router();
-const userauthcontroler = require("../Controlers/UsersAuths");
-const usercontroler = require("../Controlers/Users");
-const profilecontroler = require("../Controlers/UserProfile")
+const userauthcontroler = require("../Controlers/usersAuths");
+const usercontroler = require("../Controlers/users");
+const profilecontroler = require("../Controlers/userProfile")
 
-//middleware that decodes the JWT and gets the users attributes   
-const {getUser} = require("../Middleware/Auth")
+//verifyToken middleware that decodes the JWT and gets the users attributes
 
-//checks weahter the user is logged in or not
-const {CheckUser} = require("../Middleware/CheckUser")
+//permissions middleware takes in the role which will be allowed for the route 
+const {verifyToken,permissions} = require("../middleware/auth")
 
-router.route("/register").post(userauthcontroler.Register);
-router.route("/login").post(userauthcontroler.Login);
-router.route("/logout").post(userauthcontroler.Logout);
-router.route("/getProfile").get(getUser,CheckUser,profilecontroler.showProfile);
-router.route("/updateProfile").patch(getUser,CheckUser,profilecontroler.UpdateProfile);
-router.route("/delProfile").delete(getUser,CheckUser,profilecontroler.DeleteAccount);
-router.route("/showAlltoAdmin").get(getUser,CheckUser,usercontroler.showAlltoAdmin);
-router.route("/showAllRole/:Role").get(getUser,CheckUser,usercontroler.showbyRole);
+router.post("/register",userauthcontroler.register);
+router.post("/login",userauthcontroler.login);
+router.post("/logout",userauthcontroler.logout);
+router.get("/getProfile",verifyToken,profilecontroler.showProfile);
+router.patch("/updateProfile",verifyToken,profilecontroler.updateProfile);
+router.delete("/delProfile",verifyToken,profilecontroler.deleteAccount);
+router.get("/showAlltoAdmin",verifyToken,permissions("admin"),usercontroler.showAlltoAdmin);
+router.get("/showAllRole/:Role",verifyToken,usercontroler.showbyRole);
 
 module.exports = router;

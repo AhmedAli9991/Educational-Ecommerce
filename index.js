@@ -1,7 +1,7 @@
 const connection = require("mongoose").connection;
 const express = require("express");
-const Routes = require("./Routes");
-const connect = require("./DB/Connection");
+const routes = require("./routes/index");
+const connect = require("./db/connection");
 
 var app = express();
 
@@ -10,7 +10,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 //Calls the Routers present in the routers files
-app.use(Routes);
+app.use(routes);
 
 //function connects app to mongoDB
 connect();

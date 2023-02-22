@@ -1,14 +1,14 @@
 var router = require("express").Router();
-var user = require("./Routes/User");
+var user = require("./user");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
 
-const {ErrorHandler} = require("./Middleware/ErrorHandler");
+const {errorHandler} = require("../middleware/errorHandler");
 
 //sets limit of 5 requests in 10 seconds
 const limiter = rateLimit({
-  windowMs: 10 * 1000,
-  max: 5,
+  windowMs: 1000, //We can have 10 request per second
+  max: 10,
   message: "Too many request",
 });
 
@@ -22,6 +22,6 @@ router.use(limiter);
 router.use("/user",user);
 
 //uses error handling middleaware
-router.use(ErrorHandler);
+router.use(errorHandler);
 
 module.exports = router;

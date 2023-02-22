@@ -1,8 +1,8 @@
 var jwt = require("jsonwebtoken");
 //JWT meathods to create and verify the tokens
-module.exports.createjwt = (data) => {
+module.exports.createJwt = (data) => {
   try {
-    var Token = jwt.sign({ data }, "key", { expiresIn: 10000000000 });
+    var Token = jwt.sign({ data }, "key", { expiresIn: 1 * 60 * 60 * 1000 });
     return Token;
   } catch (error) {
     console.log(error);
