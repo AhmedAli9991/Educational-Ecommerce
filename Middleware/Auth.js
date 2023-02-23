@@ -9,7 +9,6 @@ module.exports.verifyToken = (req, res, next) => {
     const user = verify(AccessToken);
     if (user) {
       req.user = user.data;
-      console.log("middleware",req.user)
       return next();
     } else {
       throw createError(401, "not logged in");

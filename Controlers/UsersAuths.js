@@ -1,5 +1,7 @@
 //User registration and authetication
 const user = require("../db/models/user");
+const wallet = require("../db/models/wallet");
+
 const bcrypt = require("bcrypt");
 const { createJwt } = require("../utils/jwt");
 const { validate } = require("../utils/validator");
@@ -19,11 +21,13 @@ module.exports.register = async (req, res, next) => {
     if (old)throw(createError(409,"already exists"))  
 
     var newpassword = await bcrypt.hash(password, 12);
+    const wall = await wallet.create({amount:0})
     const newu = await user.create({
       name,
       email,
       password: newpassword,
       role,
+      wallet:wall
     });
     res.status(201).json(newu);
   } catch (err) {

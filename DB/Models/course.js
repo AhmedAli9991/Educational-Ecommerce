@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
-const coursechema = new mongoose.Schema({
+const courseschema = new mongoose.Schema({
   name: {
+    type: String,
+    required: true,
+  },
+  price:{
     type: String,
     required: true,
   },
@@ -25,7 +29,6 @@ const coursechema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    required:true
   },
   endDate: {
     type: Date,
@@ -50,8 +53,14 @@ const coursechema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Users",
     default: null,
+  },
+  enrolment: {
+    type: mongoose.Schema.ObjectId,
+    ref: "Enrolment",
+    index: true,
+    unique: true,
     required: true,
   },
 });
 
-module.exports = mongoose.model("Course", coursechema);
+module.exports = mongoose.model("Course", courseschema);

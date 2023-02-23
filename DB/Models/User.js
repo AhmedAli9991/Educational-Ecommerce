@@ -48,5 +48,13 @@ const userschema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  wallet:{
+    type: mongoose.Schema.ObjectId,
+    ref: "Wallet",
+    index: true,
+    unique: true,
+    required: true,
+ 
+  }
 });
 module.exports = mongoose.model("Users", userschema);

@@ -1,11 +1,13 @@
 const router = require("express").Router();
 const user = require("./user");
 const course = require("./courses");
+const wallet = require("./wallet")
 
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
 
 const { errorHandler } = require("../middleware/errorHandler");
+const {verifyToken} = require("../middleware/auth")
 
 //sets limit of 5 requests in 10 seconds
 const limiter = rateLimit({
@@ -23,7 +25,9 @@ router.use(limiter);
 //uses the routes in userrouter
 router.use("/user", user);
 //uses the routes in courserouter
-router.use("/course", course);
+router.use("/course",verifyToken, course);
+//uses the routes in walletrouter
+router.use("/wallet",verifyToken, wallet);
 
 //uses error handling middleaware
 router.use(errorHandler);

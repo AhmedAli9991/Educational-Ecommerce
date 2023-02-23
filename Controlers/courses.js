@@ -2,6 +2,7 @@ const { validate } = require("../utils/validator");
 
 // All the controler meathods for course CRUD
 const coursedoc = require("../db/models/course");
+const enrolmentdoc =require("../db/models/enrolments")
 const { createError } = require("../utils/error");
 
 module.exports.add = async (req, res, next) => {
@@ -14,10 +15,16 @@ module.exports.add = async (req, res, next) => {
       "schedule",
       "endDate",
       "owner",
+      "price"
     ]);
     if (!isValid) throw createError(422, message);
+
+    const enrolment = await enrolmentdoc.create({})
+    req.body.enrolment = enrolment
     // if the role of the person creating the course is teacher by default they will be both the owner as well as the teacher
     if(req.user.role=="teacher")req.body.teacher=req.body.owner
+
+    
     const course = await coursedoc.create(req.body);
     res.status(201).json(course);
   } catch (err) {
@@ -74,6 +81,7 @@ module.exports.update = async (req, res, next) => {
       "name",
       "schedule",
       "endDate",
+      "price"
     ]);
     if (!isValid) throw createError(422, message);
     const course = await coursedoc.findByIdAndUpdate(req.params.id, req.body, {
