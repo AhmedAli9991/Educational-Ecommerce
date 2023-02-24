@@ -2,6 +2,7 @@ const router = require("express").Router();
 const user = require("./user");
 const course = require("./courses");
 const wallet = require("./wallet")
+const enrolment = require("./enrolments")
 
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
@@ -28,6 +29,8 @@ router.use("/user", user);
 router.use("/course",verifyToken, course);
 //uses the routes in walletrouter
 router.use("/wallet",verifyToken, wallet);
+//uses all the routes for enrolments
+router.use("/enrolment",verifyToken, enrolment);
 
 //uses error handling middleaware
 router.use(errorHandler);

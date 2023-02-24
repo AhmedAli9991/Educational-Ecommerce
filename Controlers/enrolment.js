@@ -7,58 +7,83 @@ const walletdoc = require("../db/models/wallet");
 const transaction = require("../db/models/transaction");
 const { createError } = require("../utils/error");
 const enrolmentRequests = require("../db/models/enrolmentRequests");
+const user = require("../db/models/user");
 
+//when teacher or principal accepts request
 module.exports.acceptRequest = async (req, res, next) => {
   try {
+    //check if such request exists
     const cor = await enrolmentRequests
       .findById(req.params.id)
       .populate("course");
     if (!cor) throw createError(404, "no request with this id");
-
-    const userwal = await user.findById(req.cor.requestedBy).populate("wallet");
-
-    if (userwal.wallet.amount < cor.course.price)
-      throw createError(401, "not enough funds");
-
-    const walletf =
-      parseFloat(userwal.wallet.amount) - parseFloat(cor.course.price);
+    // check if the owner of the course has not already responded to the request of the user
+    if (cor.response!="not responded") throw createError(401, "already responded");
+    //check if the user currently loged in is the owner of ther course  
+    if (cor.course.owner!=req.user._id) throw createError(401, "you are not the owner");
+    
+    // accept the request
     const request = await enrolmentRequests.findByIdAndUpdate(req.params.id, {
-      response: "accepted",
+      response: "accepted",responseAt:Date.now()
     });
-
-    const newwallet = await walletdoc.findByIdAndUpdate(userwal.wallet._id, {
-      amount: walletf,
-    });
-
-    const newtrans = await transaction.create({
-      user: userwal._id,
-      transctionType: "payment",
-      amount: cor.course.price,
-    });
+    // creat a transaction for accepting and transfer the to the wallet of the owne
     const newtrans2 = await transaction.create({
       user: cor.course.owner,
       transctionType: "recieving",
       amount: cor.course.price,
     });
+    const old = await user.findById(req.user._id).populate("wallet");
 
-    const enrolled = await enrolment.findByOneAndUpdate(
+    const new_wal = parseInt(old.wallet.amount) + parseInt(cor.course.price);
+    //add the amount that has been paid for the course to the owner's wallet
+    const newwallet = await walletdoc.findByIdAndUpdate(old.wallet._id, {
+      amount: new_wal,
+    });
+    //track the earning of enrollment of the course
+    var enroll = await enrolment.findOne({course:cor.course._id});    
+    var amnt =parseInt(enroll.earning) + parseInt(cor.course.price)
+    // add student to the array of enrolled students
+    
+    const enrolled = await enrolment.findOneAndUpdate(
       { course: cor.course._id },
-      { students: { $push: cor.requestedBy } },
+      { students:[...enroll.students,cor.requestedBy] ,earning:amnt},
+
       { new: true }
     );
-    res.status(201).json(request);
+    res.status(201).json(enrolled);
   } catch (err) {
     next(err);
   }
 };
 module.exports.rejectrequest = async (req, res, next) => {
   try {
-    //meathod will show all owners and teachers and populate their references
-    const cor = await enrolmentRequests.findById(req.params.id);
+    //check if enroll request exists
+    const cor = await enrolmentRequests
+      .findById(req.params.id)
+      .populate("course");
     if (!cor) throw createError(404, "no request with this id");
-    const request = await enrolmentRequests.findByIdAndUpdate(req.params.id, {
-      response: "rejected",
+    //check if user has already responded to the request
+    if (cor.response!="not responded") throw createError(401, "already responded");
+    //check if the current user that is logged in is the owner of that course 
+    if (cor.course.owner!=req.user._id) throw createError(401, "you are not the owner");
+    
+    //create transaction to refund the value to the wallet of the person who sent the request
+    const newtrans2 = await transaction.create({
+      user: cor.course.owner,
+      transctionType: "refund",
+      amount: cor.course.price,
     });
+    
+    const old = await user.findById(cor.requestedBy).populate("wallet");
+    const new_wal = parseInt(old.wallet.amount) + parseInt(cor.course.price);
+    //refund all of that cash back into the wallet of the student 
+    const update = await walletdoc.findByIdAndUpdate(old.wallet._id, {
+      amount: new_wal,
+    });
+    //reject the request
+    const request = await enrolmentRequests.findByIdAndUpdate(req.params.id, {
+      response: "rejected",responseAt:Date.now()
+    },{new:true});
     res.status(200).json(request);
   } catch (err) {
     next(err);
@@ -67,14 +92,16 @@ module.exports.rejectrequest = async (req, res, next) => {
 
 module.exports.enableanddisable = async (req, res, next) => {
   try {
-    //first check if document with the object id exists and that the current user is the owner of course then delete
-    const old = await enrolmentRequests.findById(req.params.id);
-
+    //enable or disable enrolments
+    const old = await coursedoc.findById(req.params.id).populate("enrolment")
+    //check if the course exists with a certain _id
     if (!old) throw createError(404, "no document in collection");
-
-    const enb = !old.enabled;
-    const enabled = await enrolmentRequests.findByIdAndUpdate(
-      req.params.id,
+    //check if the current user that is logged in is the owner of the course
+    if (old.owner!=req.user._id) throw createError(401, "you are not the owner");
+    //change the enabled status 
+    const enb = !old.enrolment.enabled;
+    const enabled = await enrolment.findByIdAndUpdate(
+      old.enrolment._id,
       { enabled: enb },
       { new: true }
     );

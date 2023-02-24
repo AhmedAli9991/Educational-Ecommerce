@@ -5,7 +5,6 @@ const enrolmentrequestschema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: "Course",
     index: true,
-    unique: true,
     required: true,
   },
   requestedBy: {
@@ -19,7 +18,7 @@ const enrolmentrequestschema = new mongoose.Schema({
   },
   responseAt: {
     type: Date,
-    default: "none",
+    default: "",
   },
   response:{
     type: String,

@@ -9,7 +9,7 @@ const transactionschema = new mongoose.Schema({
   },
   transctionType:{
     type:String,
-    enum:["withdrawal","topup"],
+    enum:["withdrawal","topup","refund","recieving", "payment"],
     required :true
   },
   tranctionTime: {

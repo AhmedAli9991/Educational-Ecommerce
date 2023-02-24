@@ -1,4 +1,5 @@
 const { validate } = require("../utils/validator");
+const { cardValidation } = require("../utils/cardValidate");
 
 // All the controler meathods for Wallet and Transactions CRUD
 const transaction = require("../db/models/transaction");
@@ -10,14 +11,16 @@ module.exports.topUpWallet = async (req, res, next) => {
   try {
 
     //this meathod will allow user to top up cash in their wallet
-    const { isValid, message } = validate(req.body, [
+    var { isValid, message } = validate(req.body, [
         "card",
         "expiry",
         "pin",
         "amount"
       ]);
     if (!isValid) throw createError(422, message);
-    
+    const {card , pin ,expiry}=req.body
+    var { isValid, message } = cardValidation(card,pin,expiry)
+    if (!isValid) throw createError(422, message);
     const userwal = await user.findById(req.user._id).populate("wallet")
     const fnalamount= parseFloat(req.body.amount)+parseFloat(userwal.wallet.amount)
     const wall = await wallet.findByIdAndUpdate(userwal.wallet._id,{amount:fnalamount},{new:true});
@@ -32,14 +35,16 @@ module.exports.withdraw = async (req, res, next) => {
   try {
 
     //meathod will allow user to withdraw cash from their wallet
-    const { isValid, message } = validate(req.body, [
+    var { isValid, message } = validate(req.body, [
         "card",
         "expiry",
         "pin",
         "amount"
       ]);
     if (!isValid) throw createError(422, message);
-    
+    const {card , pin ,expiry}=req.body
+    var { isValid, message } = cardValidation(card,pin,expiry)
+    if (!isValid) throw createError(422, message);
     const userwal = await user.findById(req.user._id).populate("wallet")
     if(userwal.wallet.amount<req.body.amount)throw createError(401, "not enough funds"); 
     
