@@ -55,6 +55,11 @@ const userschema = new mongoose.Schema({
     unique: true,
     required: true,
  
-  }
+  },
+  //TODO- Add Status here for user. Following will be status Also add migration for the existing users
+  //Initial- By default
+  //Active- Verified
+  //InActive- Blocked
+  //Deleted- Deleled
 });
 module.exports = mongoose.model("Users", userschema);

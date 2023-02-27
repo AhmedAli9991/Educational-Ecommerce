@@ -1,7 +1,7 @@
 //All the Routes related to course
 
 const router = require("express").Router();
-const coursecontroler = require("../controlers/courses");
+const coursecontroler = require("../controllers/courses");
 
 //verifyToken middleware that decodes the JWT and gets the users attributes
 

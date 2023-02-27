@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const user = require("./user");
+const user = require("./users");
 const course = require("./courses");
 const wallet = require("./wallet")
-const enrolment = require("./enrolments")
+const enrolment = require("./enrollments")
 
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
