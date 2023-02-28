@@ -1,5 +1,6 @@
 module.exports.cardValidation = (card, pin, expiry) => {
-  if (!/^(?:[0-9]{11}|[0-9]{2}-[0-9]{3}-[0-9]{6})$/.test(card)) {
+  let regex = new RegExp(!/^(?:[0-9]{11}|[0-9]{2}-[0-9]{3}-[0-9]{6})$/);
+  if (regex.test(card)) {
     return { isValid: false, message: "not valid account number" };
   }
   if (pin != 4 || isNaN(pin))

@@ -35,6 +35,7 @@ module.exports.sendRequest = async (req, res, next) => {
       amount: walletf,
     });
     // create the transaction reciet for that
+
     const newtrans = await transaction.create({
       user: userwal._id,
       transctionType: "payment",
@@ -42,7 +43,7 @@ module.exports.sendRequest = async (req, res, next) => {
     });
 
     const request = await enrolmentRequests.create({course:req.params.id,requestedBy:req.user._id});
-    res.status(201).json(request);
+    res.status(201).json({request});
   } catch (err) {
     next(err);
 
@@ -63,7 +64,7 @@ module.exports.showallRequestsSentbyUser = async (req, res, next) => {
 };
 module.exports.showallRequestsSentbyUserwithResponse = async (req, res, next) => {
   try {
-
+  
     //meathod will show all the request that have a certain response status
     var acceptable= ["accepted","rejected","not responded"]
     if(!acceptable.includes(req.params.response))throw createError(404,"no such response is accepted")
