@@ -100,7 +100,7 @@ module.exports.showallRequestsSenttoUserwithResponse = async (req, res, next) =>
   }
 };
 
-module.exports.delete = async (req, res, next) => {
+module.exports.cancelaRequests = async (req, res, next) => {
   try {
     //this meathod is used t delete requests that have been made and have not been responded to 
 

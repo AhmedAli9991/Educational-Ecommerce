@@ -18,12 +18,14 @@ router.get("/showallrecieved",permissions("teacher","principal"),enrolmentReques
 //the below router will take respose status as params
 router.get("/showallrecieved/:response",enrolmentRequestcontroler.showallRequestsSenttoUserwithResponse);
 //the below router take request _id as params
-router.delete("/delete/:id",permissions("student"),enrolmentRequestcontroler.delete); //TODO - dont use end point like /delete/:id
+router.delete("/cancel/:id",permissions("student"),enrolmentRequestcontroler.cancelaRequests); //TODO - dont use end point like /delete/:id
 //the below router take request _id as params
 router.patch("/accept/:id",permissions("teacher","principal"),enrolmentcontroler.acceptRequest);
 //the below router take request _id as params
 router.patch("/reject/:id",permissions("teacher","principal"),enrolmentcontroler.rejectrequest);
-//enable or disable the params here will take in the _id of course
-router.patch("/enable/:id",permissions("teacher","principal"),enrolmentcontroler.enableanddisable); //TODO - this should only Enable not disable, create another API for disable
+//enable the enrolements of a courese params here will take in the _id of course
+router.patch("/enable/:id",permissions("teacher","principal"),enrolmentcontroler.enable); //TODO - this should only Enable not disable, create another API for disable
+//disable the enrolements of a courese params here will take in the _id of course
+router.patch("/disable/:id",permissions("teacher","principal"),enrolmentcontroler.disable); //TODO - this should only Enable not disable, create another API for disable
 
 module.exports = router;

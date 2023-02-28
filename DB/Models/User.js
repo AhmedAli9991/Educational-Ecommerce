@@ -56,6 +56,12 @@ const userschema = new mongoose.Schema({
     required: true,
  
   },
+  status:{
+    type: String,
+    default:"Initial",
+    enum:["Initial","Active","InActive","Deleted"]
+
+  }
   //TODO- Add Status here for user. Following will be status Also add migration for the existing users
   //Initial- By default
   //Active- Verified

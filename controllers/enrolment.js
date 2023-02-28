@@ -90,7 +90,7 @@ module.exports.rejectrequest = async (req, res, next) => {
   }
 };
 
-module.exports.enableanddisable = async (req, res, next) => {
+module.exports.enable = async (req, res, next) => {
   try {
     //enable or disable enrolments
     const old = await coursedoc.findById(req.params.id).populate("enrolment")
@@ -99,10 +99,30 @@ module.exports.enableanddisable = async (req, res, next) => {
     //check if the current user that is logged in is the owner of the course
     if (old.owner!=req.user._id) throw createError(401, "you are not the owner");
     //change the enabled status 
-    const enb = !old.enrolment.enabled;
     const enabled = await enrolment.findByIdAndUpdate(
       old.enrolment._id,
-      { enabled: enb },
+      { enabled: true },
+      { new: true }
+    );
+
+    res.status(200).json(enabled);
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports.disable = async (req, res, next) => {
+  try {
+    //enable or disable enrolments
+    const old = await coursedoc.findById(req.params.id).populate("enrolment")
+    //check if the course exists with a certain _id
+    if (!old) throw createError(404, "no document in collection");
+    //check if the current user that is logged in is the owner of the course
+    if (old.owner!=req.user._id) throw createError(401, "you are not the owner");
+    //change the enabled status 
+    const enabled = await enrolment.findByIdAndUpdate(
+      old.enrolment._id,
+      { enabled: false },
       { new: true }
     );
 

@@ -1,10 +1,10 @@
 // connect to mongoDB
-
+const {mongoDB} = require("../config/index")
 const mongoose = require("mongoose");
 
 const connect = async () => {
   try {
-    await mongoose.connect("mongodb://127.0.0.1:27017/TaskAPI"); //TODO- Get this URL from Config
+    await mongoose.connect(mongoDB.url); 
   } catch (error) {
     console.log(error);
   }

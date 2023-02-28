@@ -13,10 +13,21 @@ const {verifyToken,permissions} = require("../middleware/auth")
 router.post("/register",userauthcontroler.register);
 router.post("/login",userauthcontroler.login);
 router.post("/logout",userauthcontroler.logout);
-router.get("/getProfile",verifyToken,profilecontroler.showProfile); //TODO- instead of getProfile, use /profile/:id
-router.patch("/updateProfile",verifyToken,profilecontroler.updateProfile);  //TODO- instead of updateProfile, use /profile/edit/:id
-router.delete("/delProfile",verifyToken,profilecontroler.deleteAccount); //TODO- instead of delProfile, use /profile/:id
+router.post("/verification",userauthcontroler.verification);
+router.post("/resend",userauthcontroler.resend);
+
+
+router.route("/Profile",verifyToken).get(profilecontroler.showProfile)
+.patch(profilecontroler.updateProfile).patch(profilecontroler.deleteAccount);
+
 router.get("/showAlltoAdmin",verifyToken,permissions("admin"),usercontroler.showAlltoAdmin);
 router.get("/showAllRole/:role",verifyToken,usercontroler.showbyRole);
+router.get("/showStatus/:status",verifyToken,permissions("admin"),usercontroler.showbyStatus);
+
+//user id of whose status is to be changed is passed to params through these routes
+router.patch("/deactivate/:id",verifyToken,permissions("admin"),usercontroler.deactivateUser)
+router.patch("/delete/:id",verifyToken,permissions("admin"),usercontroler.deleteUser);
+router.patch("/reActivate/:id",verifyToken,permissions("admin"),usercontroler.activateUser);
+
 
 module.exports = router;
