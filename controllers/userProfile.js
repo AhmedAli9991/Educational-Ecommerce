@@ -39,7 +39,7 @@ module.exports.updateProfile = async (req, res, next) => {
 
 module.exports.deleteAccount = async (req, res, next) => {
   try {
-    const del = await user.deleteOne({ _id: req.user._id });
+    const del = await user.deleteOne({ _id: req.user._id }); //TODO- Check if account exist or is deleted or not?
     res.clearCookie("AccessToken");
     res.status(200).json(del);
   } catch (err) {

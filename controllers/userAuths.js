@@ -77,6 +77,6 @@ module.exports.logout = (req, res) => {
     res.clearCookie("AccessToken");
     res.status(200).json({message:"logged out"});
   } catch (err) {
-    res.status(400).json(err);
+    res.status(400).json(err); //TODO- res.status(500).json({error: err})
   }
 };

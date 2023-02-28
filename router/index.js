@@ -1,8 +1,8 @@
 const router = require("express").Router();
-const user = require("./user");
+const user = require("./users");
 const course = require("./courses");
 const wallet = require("./wallet")
-const enrolment = require("./enrolments")
+const enrolment = require("./enrollments")
 
 const rateLimit = require("express-rate-limit");
 const cookieParser = require("cookie-parser");
@@ -11,7 +11,9 @@ const { errorHandler } = require("../middleware/errorHandler");
 const {verifyToken} = require("../middleware/auth")
 
 //sets limit of 5 requests in 10 seconds
-const limiter = rateLimit({
+//TODO- Move this rateLimiter to Utils
+//TODO- There must be Seperate Rate limiter for DB, SignUp, Login and one Default just like you have here
+const limiter = rateLimit({   
   windowMs: 1000, //We can have 10 request per second
   max: 10,
   message: "Too many request",
@@ -21,6 +23,7 @@ const limiter = rateLimit({
 router.use(cookieParser());
 
 //middleware that limits the number of request
+
 router.use(limiter);
 
 //uses the routes in userrouter
