@@ -13,7 +13,7 @@ router.use(expressWinston.logger({
     winston.format.colorize(),winston.format.timestamp({
       format: 'YYYY-MM-DD hh:mm:ss.SSS A',
     }),
-    winston.format.json(),winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
+    winston.format.json(),winston.format.printf((info) => ` ${info.level}: response status : ${info.message} response time : [${info.timestamp}] `)
     ,),
   meta: false, // optional: control whether you want to log the meta data about the request (default to true)
   msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
