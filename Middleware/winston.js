@@ -3,16 +3,20 @@ var expressWinston = require('express-winston');
 
 const router = require("express").Router();
 
+
 router.use(expressWinston.logger({
   transports: [
     new winston.transports.Console()
   ],
+  
   format: winston.format.combine(
-    winston.format.colorize(),
-    winston.format.json(),winston.format.prettyPrint(),
-  ),
-  meta: true, // optional: control whether you want to log the meta data about the request (default to true)
-  msg: "HTTP {{req.method}} {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+    winston.format.colorize(),winston.format.timestamp({
+      format: 'YYYY-MM-DD hh:mm:ss.SSS A',
+    }),
+    winston.format.json(),winston.format.printf((info) => `[${info.timestamp}] ${info.level}: ${info.message}`)
+    ,),
+  meta: false, // optional: control whether you want to log the meta data about the request (default to true)
+  msg: "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
   requestFilter: (req, propName)=> {
     if(propName !== "headers") return req[propName];
   

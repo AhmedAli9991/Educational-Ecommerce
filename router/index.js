@@ -3,7 +3,7 @@ const user = require("./users");
 const course = require("./courses");
 const wallet = require("./wallet")
 const enrolment = require("./enrollments")
-const logger = require("../utils/winston")
+const logger = require("../middleware/winston")
 
 const cookieParser = require("cookie-parser");
 
