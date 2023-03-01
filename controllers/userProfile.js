@@ -7,7 +7,6 @@ const { createError } = require("../utils/error");
 
 module.exports.showProfile = async (req, res, next) => {
   try {
-    console.log(req.user);
     const profile = await user.findById(req.user._id, {
       _id: 0,
       password: 0,
@@ -39,7 +38,7 @@ module.exports.updateProfile = async (req, res, next) => {
 
 module.exports.deleteAccount = async (req, res, next) => {
   try {
-    const del = await user.findByIdAndUpdate(req.user._id,{status:"Deleted"},{new:true}); //TODO- Check if account exist or is deleted or not?
+    const del = await user.findByIdAndUpdate(req.user._id,{status:"Deleted"},{new:true});
     res.clearCookie("AccessToken");
     res.status(200).json(del);
   } catch (err) {

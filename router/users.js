@@ -9,15 +9,16 @@ const profilecontroler = require("../controllers/userProfile")
 
 //permissions middleware takes in the role which will be allowed for the route 
 const {verifyToken,permissions} = require("../middleware/auth")
+const {signuplimiter,loginlimiter} = require("../middleware/ratelimters")
 
-router.post("/register",userauthcontroler.register);
-router.post("/login",userauthcontroler.login);
+router.post("/register",signuplimiter,userauthcontroler.register);
+router.post("/login",loginlimiter,userauthcontroler.login);
 router.post("/logout",userauthcontroler.logout);
 router.post("/verification",userauthcontroler.verification);
 router.post("/resend",userauthcontroler.resend);
 
 
-router.route("/Profile",verifyToken).get(profilecontroler.showProfile)
+router.route("/profile",verifyToken).get(profilecontroler.showProfile)
 .patch(profilecontroler.updateProfile).patch(profilecontroler.deleteAccount);
 
 router.get("/showAlltoAdmin",verifyToken,permissions("admin"),usercontroler.showAlltoAdmin);
@@ -26,7 +27,7 @@ router.get("/showStatus/:status",verifyToken,permissions("admin"),usercontroler.
 
 //user id of whose status is to be changed is passed to params through these routes
 router.patch("/deactivate/:id",verifyToken,permissions("admin"),usercontroler.deactivateUser)
-router.patch("/delete/:id",verifyToken,permissions("admin"),usercontroler.deleteUser);
+router.patch("/remove/:id",verifyToken,permissions("admin"),usercontroler.deleteUser);
 router.patch("/reActivate/:id",verifyToken,permissions("admin"),usercontroler.activateUser);
 
 

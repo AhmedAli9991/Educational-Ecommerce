@@ -19,5 +19,5 @@ connect();
 
 //Waits for the Mongoose to connect to mongoDB and ones it does it atarts listening on port 4000
 connection.on("connected", () => {
-  app.listen(port, () => console.log(`Listening on port ${port}`)); //TODO- Dont use this, instead grab from Config
+  app.listen(port, () => console.log(`Listening on port ${port}`)); 
 });

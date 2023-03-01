@@ -142,16 +142,16 @@ module.exports.login = async (req, res, next) => {
 };
 
 //logout and clear cookies
-module.exports.logout = (req, res) => {
+module.exports.logout = (req, res, next) => {
   try {
     const { AccessToken } = req.cookies;
 
     if (!AccessToken)
-      next(createError(401,"not logged in"));
+      throw (createError(401,"not logged in"));
 
     res.clearCookie("AccessToken");
     res.status(200).json({message:"logged out"});
   } catch (err) {
-    res.status(400).json({error:err}); 
+    next(err) 
   }
 };
