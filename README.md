@@ -1,4 +1,4 @@
-# API Ed-Tech
+# API Educational E-commerce
 
 The following is an Ed-Tech API it is Built using Node and Expres and uses the following Tools and Technologies 
 
