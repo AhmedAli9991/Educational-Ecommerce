@@ -10,9 +10,8 @@ const {permissions} = require("../middleware/auth")
 
 router.get("/",walletcontroler.viewWallet); 
 router.patch("/topup",walletcontroler.topUpWallet);
-router.get("/transactions",walletcontroler.viewOwnTransactions); //TODO - change to transactions
+router.get("/transactions",walletcontroler.viewOwnTransactions); 
 router.patch("/withdraw",walletcontroler.withdraw);
-router.get("/history",permissions("admin"),walletcontroler.viewAllTransactions);  //TODO - change to history
+router.get("/history",permissions("admin"),walletcontroler.viewAllTransactions);  
 
-//TODO - You should add default router here like /wallet and then other Endpoints
 module.exports = router;

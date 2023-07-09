@@ -10,9 +10,6 @@ const cookieParser = require("cookie-parser");
 const { errorHandler } = require("../middleware/errorHandler");
 const {verifyToken} = require("../middleware/auth")
 const {defaultlimiter,dblimiter} = require("../middleware/ratelimters")
-//TODO- Move this rateLimiter to Utils
-//TODO- There must be Seperate Rate limiter for DB, SignUp, Login and one Default just like you have here
-
 
 //allows us to use cookies
 router.use(cookieParser());
