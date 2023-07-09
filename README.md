@@ -19,7 +19,7 @@ The following is an Ed-Tech API it is Built using Node and Expres and uses the f
 
 ### modules
 
-It has the following modules implemented 
+The server has the following features implemented
 
 #### Login/Registeration and User Profiling 
 user can register, login, Edit or delete their account the passwords are encrypted at time of creation and stored in the database. The authentication is done through the help of JSON web Tokens which are stored and passed through Cookies. the routes that are allowed to be used by the current users role are only accesed. user once they register recieve a email with 4 digit code which they enter and verify their account they can also ask for code to be re sent to them 
