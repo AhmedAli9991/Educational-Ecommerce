@@ -16,6 +16,7 @@ The following is an Ed-Tech API it is Built using Node and Expres and uses the f
 - ratelimt
 - ratelimit mongo
 - winston
+- cors
 
 ### modules
 
